@@ -22,7 +22,7 @@ app.get('/list', (req, res) => {
     )
 })
 
-app.get('/tasks/:id', (req, res) => {
+app.get('/list/:id', (req, res) => {
     const id = req.params.id;
     pool.query(
         'SELECT * FROM `tasks` WHERE id = ?', [id],
