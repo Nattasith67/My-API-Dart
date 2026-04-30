@@ -9,11 +9,10 @@ app.use(express.json())
 
 const pool = mysql.createPool(process.env.DATABASE_URL);
 
-// ดึงข้อมูลทั้งหมดจากตาราง list
 app.get('/list', (req, res) => {
     pool.query(
         'SELECT * FROM `tasks`',
-        function (err, results, fields) {
+        function (err, results) {
             if (err) {
                 res.status(500).send(err);
             } else {
@@ -23,12 +22,11 @@ app.get('/list', (req, res) => {
     )
 })
 
-// ดึงข้อมูลราย item จากตาราง tasks ด้วย id
 app.get('/tasks/:id', (req, res) => {
     const id = req.params.id;
     pool.query(
         'SELECT * FROM `tasks` WHERE id = ?', [id],
-        function (err, results, fields) {
+        function (err, results) {
             if (err) {
                 res.status(500).send(err);
             } else {
@@ -38,14 +36,13 @@ app.get('/tasks/:id', (req, res) => {
     )
 })
 
-// เพิ่มข้อมูลลงในตาราง tasks
 app.post('/list', (req, res) => {
     pool.query(
         'INSERT INTO `tasks` (`name`, `taskdate`, `status`, `createDate`, `type`) VALUES (?, ?, ?, NOW(), ?)',
-        [req.body.name, req.body.date, req.body.status, req.body.createDate, req.body.type],
-         function (err, results, fields) {
+        [req.body.name, req.body.date, req.body.status, req.body.type],
+        function (err, results) {
             if (err) {
-                console.error('Error in POST /tasks:', err);
+                console.error(err);
                 res.status(500).send('Error adding item');
             } else {
                 res.status(200).send(results);
@@ -54,14 +51,13 @@ app.post('/list', (req, res) => {
     )
 })
 
-// อัปเดตข้อมูลในตาราง tasks
 app.put('/tasks/:id', (req, res) => {
     pool.query(
-        'UPDATE `tasks` SET `name`= ?, `taskDate`= ?, `status`= ?, `type`= ?, updateDate = NOW() WHERE id =?',
-        [req.body.name, req.body.taskdate, req.body.status, req.body.type, req.body.updateDate, req.params.id],
-         function (err, results, fields) {
+        'UPDATE `tasks` SET `name`= ?, `taskdate`= ?, `status`= ?, `type`= ?, `updateDate` = NOW() WHERE id = ?',
+        [req.body.name, req.body.taskdate, req.body.status, req.body.type, req.params.id],
+        function (err, results) {
             if (err) {
-                console.error('Error in PUT /tasks/:id:', err);
+                console.error(err);
                 res.status(500).send('Error updating item');
             } else {
                 res.send(results);
@@ -70,14 +66,13 @@ app.put('/tasks/:id', (req, res) => {
     )
 })
 
-// ลบข้อมูลออกจากตาราง tasks
 app.delete('/list/:id', (req, res) => {
     pool.query(
-        'DELETE FROM `tasks` WHERE id =?',
+        'DELETE FROM `tasks` WHERE id = ?',
         [req.params.id],
-         function (err, results, fields) {
+        function (err, results) {
             if (err) {
-                console.error('Error in DELETE /list/:id:', err);
+                console.error(err);
                 res.status(500).send('Error deleting item');
             } else {
                 res.send(results);
@@ -86,9 +81,6 @@ app.delete('/list/:id', (req, res) => {
     )
 })
 
-app.listen(process.env.PORT || 3000, () => {
-    console.log('CORS-enabled web server listening on port 3000')
-})
+app.listen(process.env.PORT || 3000)
 
-// export the app for vercel serverless functions
 module.exports = app;
