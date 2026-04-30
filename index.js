@@ -43,7 +43,7 @@ app.get('/tasks/:id', (req, res) => {
 })
 
 // เพิ่มข้อมูลลงในตาราง tasks
-app.post('/tasks', (req, res) => {
+app.post('/list', (req, res) => {
     connection.query(
         'INSERT INTO `tasks` (`name`, `date`, `status`) VALUES (?, ?, ?)',
         [req.body.name, req.body.date, req.body.status],
@@ -81,7 +81,7 @@ app.delete('/list/:id', (req, res) => {
         [req.params.id],
          function (err, results, fields) {
             if (err) {
-                console.error('Error in DELETE /tasks/:id:', err);
+                console.error('Error in DELETE /list/:id:', err);
                 res.status(500).send('Error deleting item');
             } else {
                 res.send(results);
