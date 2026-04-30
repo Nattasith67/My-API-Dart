@@ -51,6 +51,21 @@ app.post('/list', (req, res) => {
     )
 })
 
+app.patch('/list/:id/status', (req, res) => {
+    pool.query(
+        'UPDATE `tasks` SET `status`= ? WHERE id = ?',
+        [req.body.status, req.params.id],
+        function (err, results) {
+            if (err) {
+                console.error(err);
+                res.status(500).send('Error updating item');
+            } else {
+                res.send(results);
+            }
+        }
+    )
+})
+
 app.patch('/list/:id', (req, res) => {
     pool.query(
         'UPDATE `tasks` SET `name`= ?, `taskdate`= ?, `status`= ?, `type`= ?, `updateDate` = NOW() WHERE id = ?',
