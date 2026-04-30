@@ -41,7 +41,7 @@ app.get('/tasks/:id', (req, res) => {
 // เพิ่มข้อมูลลงในตาราง tasks
 app.post('/list', (req, res) => {
     pool.query(
-        'INSERT INTO `tasks` (`name`, `taskdate`, `status`, createDate, type) VALUES (?, ?, ?, NOW(), ?)',
+        'INSERT INTO `tasks` (`name`, `taskdate`, `status`, `createDate`, `type`) VALUES (?, ?, ?, NOW(), ?)',
         [req.body.name, req.body.date, req.body.status, req.body.createDate, req.body.type],
          function (err, results, fields) {
             if (err) {
@@ -57,8 +57,8 @@ app.post('/list', (req, res) => {
 // อัปเดตข้อมูลในตาราง tasks
 app.put('/tasks/:id', (req, res) => {
     pool.query(
-        'UPDATE `tasks` SET `name`= ?, `taskDate`= ?, `status`= ?, updateDate = NOW() WHERE id =?',
-        [req.body.name, req.body.taskdate, req.body.status, req.body.updateDate, req.params.id],
+        'UPDATE `tasks` SET `name`= ?, `taskDate`= ?, `status`= ?, `type`= ?, updateDate = NOW() WHERE id =?',
+        [req.body.name, req.body.taskdate, req.body.status, req.body.type, req.body.updateDate, req.params.id],
          function (err, results, fields) {
             if (err) {
                 console.error('Error in PUT /tasks/:id:', err);
