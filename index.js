@@ -51,7 +51,7 @@ app.post('/list', (req, res) => {
     )
 })
 
-app.put('/tasks/:id', (req, res) => {
+app.patch('/tasks/:id', (req, res) => {
     pool.query(
         'UPDATE `tasks` SET `name`= ?, `taskdate`= ?, `status`= ?, `type`= ?, `updateDate` = NOW() WHERE id = ?',
         [req.body.name, req.body.taskdate, req.body.status, req.body.type, req.params.id],
