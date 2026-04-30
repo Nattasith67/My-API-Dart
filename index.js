@@ -75,7 +75,7 @@ app.put('/tasks/:id', (req, res) => {
 })
 
 // ลบข้อมูลออกจากตาราง tasks
-app.delete('/tasks/:id', (req, res) => {
+app.delete('/list/:id', (req, res) => {
     connection.query(
         'DELETE FROM `tasks` WHERE id =?',
         [req.params.id],
