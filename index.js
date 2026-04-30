@@ -45,8 +45,8 @@ app.get('/tasks/:id', (req, res) => {
 // เพิ่มข้อมูลลงในตาราง tasks
 app.post('/tasks', (req, res) => {
     connection.query(
-        'INSERT INTO `tasks` (`title`, `description`, `status`, `due_date`, `time`) VALUES (?, ?, ?, ?, ?)',
-        [req.body.title, req.body.description, req.body.status, req.body.due_date, req.body.time],
+        'INSERT INTO `tasks` (`name`, `date`, `status`) VALUES (?, ?, ?)',
+        [req.body.name, req.body.date, req.body.status],
          function (err, results, fields) {
             if (err) {
                 console.error('Error in POST /tasks:', err);
