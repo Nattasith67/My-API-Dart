@@ -46,7 +46,7 @@ app.get('/tasks/:id', (req, res) => {
 app.post('/list', (req, res) => {
     connection.query(
         'INSERT INTO `tasks` (`name`, `taskdate`, `status`) VALUES (?, ?, ?)',
-        [req.body.name, req.body.date, req.body.status],
+        [req.body.name, req.body.taskdate, req.body.status],
          function (err, results, fields) {
             if (err) {
                 console.error('Error in POST /tasks:', err);
@@ -61,8 +61,8 @@ app.post('/list', (req, res) => {
 // อัปเดตข้อมูลในตาราง tasks
 app.put('/tasks/:id', (req, res) => {
     connection.query(
-        'UPDATE `tasks` SET `name`=?, `date`=?, `status`=? WHERE id =?',
-        [req.body.name, req.body.date, req.body.status, req.params.id],
+        'UPDATE `tasks` SET `name`=?, `taskdate`=?, `status`=? WHERE id =?',
+        [req.body.name, req.body.taskdate, req.body.status, req.params.id],
          function (err, results, fields) {
             if (err) {
                 console.error('Error in PUT /tasks/:id:', err);
