@@ -7,15 +7,11 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-const connection = mysql.createConnection(process.env.DATABASE_URL)
-
-app.get('/', (req, res) => {
-    res.send('Hello world!!')
-})
+const pool = mysql.createPool(process.env.DATABASE_URL);
 
 // ดึงข้อมูลทั้งหมดจากตาราง list
 app.get('/list', (req, res) => {
-    connection.query(
+    pool.query(
         'SELECT * FROM `tasks`',
         function (err, results, fields) {
             if (err) {
@@ -30,7 +26,7 @@ app.get('/list', (req, res) => {
 // ดึงข้อมูลราย item จากตาราง tasks ด้วย id
 app.get('/tasks/:id', (req, res) => {
     const id = req.params.id;
-    connection.query(
+    pool.query(
         'SELECT * FROM `tasks` WHERE id = ?', [id],
         function (err, results, fields) {
             if (err) {
@@ -44,7 +40,7 @@ app.get('/tasks/:id', (req, res) => {
 
 // เพิ่มข้อมูลลงในตาราง tasks
 app.post('/list', (req, res) => {
-    connection.query(
+    pool.query(
         'INSERT INTO `tasks` (`name`, `taskdate`, `status`) VALUES (?, ?, ?)',
         [req.body.name, req.body.taskdate, req.body.status],
          function (err, results, fields) {
@@ -60,7 +56,7 @@ app.post('/list', (req, res) => {
 
 // อัปเดตข้อมูลในตาราง tasks
 app.put('/tasks/:id', (req, res) => {
-    connection.query(
+    pool.query(
         'UPDATE `tasks` SET `name`=?, `taskdate`=?, `status`=? WHERE id =?',
         [req.body.name, req.body.taskdate, req.body.status, req.params.id],
          function (err, results, fields) {
@@ -76,7 +72,7 @@ app.put('/tasks/:id', (req, res) => {
 
 // ลบข้อมูลออกจากตาราง tasks
 app.delete('/list/:id', (req, res) => {
-    connection.query(
+    pool.query(
         'DELETE FROM `tasks` WHERE id =?',
         [req.params.id],
          function (err, results, fields) {
