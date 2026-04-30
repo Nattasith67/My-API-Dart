@@ -41,8 +41,8 @@ app.get('/tasks/:id', (req, res) => {
 // เพิ่มข้อมูลลงในตาราง tasks
 app.post('/list', (req, res) => {
     pool.query(
-        'INSERT INTO `tasks` (`name`, `taskdate`, `status`, createDate) VALUES (?, ?, ?, NOW())',
-        [req.body.name, req.body.date, req.body.status, req.body.createDate],
+        'INSERT INTO `tasks` (`name`, `taskdate`, `status`, createDate, type) VALUES (?, ?, ?, NOW(), ?)',
+        [req.body.name, req.body.date, req.body.status, req.body.createDate, req.body.type],
          function (err, results, fields) {
             if (err) {
                 console.error('Error in POST /tasks:', err);
