@@ -61,8 +61,8 @@ app.post('/tasks', (req, res) => {
 // อัปเดตข้อมูลในตาราง tasks
 app.put('/tasks/:id', (req, res) => {
     connection.query(
-        'UPDATE `tasks` SET `title`=?, `description`=?, `status`=?, `due_date`=?, `time`=? WHERE id =?',
-        [req.body.title, req.body.description, req.body.status, req.body.due_date, req.body.time, req.params.id],
+        'UPDATE `tasks` SET `name`=?, `date`=?, `status`=? WHERE id =?',
+        [req.body.name, req.body.date, req.body.status, req.params.id],
          function (err, results, fields) {
             if (err) {
                 console.error('Error in PUT /tasks/:id:', err);
