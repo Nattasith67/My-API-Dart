@@ -42,7 +42,7 @@ app.get('/tasks/:id', (req, res) => {
 app.post('/list', (req, res) => {
     pool.query(
         'INSERT INTO `tasks` (`name`, `taskdate`, `status`) VALUES (?, ?, ?)',
-        [req.body.name, req.body.taskdate, req.body.status],
+        [req.body.name, req.body.date, req.body.status],
          function (err, results, fields) {
             if (err) {
                 console.error('Error in POST /tasks:', err);
