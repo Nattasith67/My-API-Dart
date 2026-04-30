@@ -22,6 +22,19 @@ app.get('/list', (req, res) => {
     )
 })
 
+app.get('/list/count', (req, res) => {
+    pool.query(
+        'SELECT COUNT(*) as total FROM `tasks`',
+        function (err, results) {
+            if (err) {
+                res.status(500).send(err);
+            } else {
+                res.send(results);
+            }
+        }
+    )
+})
+
 app.get('/list/:id', (req, res) => {
     const id = req.params.id;
     pool.query(
