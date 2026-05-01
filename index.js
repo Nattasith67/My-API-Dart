@@ -107,6 +107,7 @@ app.get('/list/categories', (req, res) => {
     pool.query(
         'SELECT * FROM `category`',
         function (err, results) {
+            console.log(results);
             if (err) {
                 res.status(500).send(err);
             } else {
