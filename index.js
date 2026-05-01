@@ -9,9 +9,7 @@ app.use(express.json())
 
 const pool = mysql.createPool(process.env.DATABASE_URL);
 
-// --- 1. Route สำหรับดึงข้อมูลภาพรวม (Static Routes) ---
-
-// ดึงหมวดหมู่ (ย้ายขึ้นมาแล้ว Log จะทำงานปกติ)
+// Fetch all categories
 app.get('/list/categories', (req, res) => {
     console.log('Category route hit');
     pool.query(
@@ -21,6 +19,37 @@ app.get('/list/categories', (req, res) => {
                 res.status(500).send(err);
             } else {
                 res.json(results);
+            }
+        }
+    )
+})
+
+// Update Category
+app.get('/list/categories/:id', (req, res) => {
+    pool.query(
+        'UPDATE `category` SET `name` = ? WHERE `id` = ?',
+        [req.body.name, req.params.id],
+        function (err, results) {
+            if (err) {
+                res.status(500).send(err);
+            } else {
+                res.json(results);
+            }
+        }
+    )
+})
+
+// Delete Category
+app.delete('/list/categories/:id', (req, res) => {
+    pool.query(
+        'DELETE FROM `category` WHERE id = ?',
+        [req.params.id],
+        function (err, results) {
+            if (err) {
+                console.error(err);
+                res.status(500).send('Error deleting item');
+            } else {
+                res.send(results);
             }
         }
     )
