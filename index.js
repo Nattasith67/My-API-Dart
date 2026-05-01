@@ -103,9 +103,9 @@ app.get('/list/:id', (req, res) => {
     )
 })
 
-app.get('/list/getCategory', (req, res) => {
+app.get('/list/categories', (req, res) => {
     pool.query(
-        'SELECT * FROM `categories`',
+        'SELECT * FROM `category`',
         function (err, results) {
             if (err) {
                 res.status(500).send(err);
@@ -118,7 +118,7 @@ app.get('/list/getCategory', (req, res) => {
 
 app.post('/list/category', (req, res) => {
     pool.query(
-        'INSERT INTO `categories` (`name`) VALUES (?)',
+        'INSERT INTO `category` (`name`) VALUES (?)',
         [req.body.name],
         function (err, results) {
             if (err) {
