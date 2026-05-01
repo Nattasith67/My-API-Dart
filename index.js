@@ -9,21 +9,24 @@ app.use(express.json())
 
 const pool = mysql.createPool(process.env.DATABASE_URL);
 
-// Get all tasks
-app.get('/list', (req, res) => {
+// --- 1. Route สำหรับดึงข้อมูลภาพรวม (Static Routes) ---
+
+// ดึงหมวดหมู่ (ย้ายขึ้นมาแล้ว Log จะทำงานปกติ)
+app.get('/list/categories', (req, res) => {
+    console.log('Category route hit');
     pool.query(
-        'SELECT * FROM `tasks`',
+        'SELECT * FROM `category`',
         function (err, results) {
             if (err) {
                 res.status(500).send(err);
             } else {
-                res.send(results);
+                res.json(results);
             }
         }
     )
 })
 
-// Get total count of tasks
+// นับจำนวนทั้งหมด
 app.get('/list/count', (req, res) => {
     pool.query(
         'SELECT COUNT(*) as total FROM `tasks`',
@@ -89,10 +92,10 @@ app.get('/list/completed', (req, res) => {
     )
 })
 
-app.get('/list/:id', (req, res) => {
-    const id = req.params.id;
+// ดึงรายการทั้งหมด
+app.get('/list', (req, res) => {
     pool.query(
-        'SELECT * FROM `tasks` WHERE id = ?', [id],
+        'SELECT * FROM `tasks`',
         function (err, results) {
             if (err) {
                 res.status(500).send(err);
@@ -103,19 +106,7 @@ app.get('/list/:id', (req, res) => {
     )
 })
 
-app.get('/list/categories', (req, res) => {
-    pool.query(
-        'SELECT * FROM `category`',
-        function (err, results) {
-            console.log(results);
-            if (err) {
-                res.status(500).send(err);
-            } else {
-                res.json(results);
-            }
-        }
-    )
-})
+// --- 2. Route สำหรับเพิ่มข้อมูล (POST) ---
 
 app.post('/list/category', (req, res) => {
     pool.query(
@@ -141,6 +132,23 @@ app.post('/list', (req, res) => {
                 res.status(500).send('Error adding item');
             } else {
                 res.status(200).send(results);
+            }
+        }
+    )
+})
+
+// --- 3. Route ที่มีการใช้ Parameter (Dynamic Routes) ---
+// ** ต้องอยู่ด้านล่าง Static Routes เสมอ **
+
+app.get('/list/:id', (req, res) => {
+    const id = req.params.id;
+    pool.query(
+        'SELECT * FROM `tasks` WHERE id = ?', [id],
+        function (err, results) {
+            if (err) {
+                res.status(500).send(err);
+            } else {
+                res.send(results);
             }
         }
     )
