@@ -35,6 +35,19 @@ app.get('/list/count', (req, res) => {
     )
 })
 
+app.get('/list/pendingCount', (req, res) => {
+    pool.query(
+        'SELECT COUNT(*) as total FROM `tasks` WHERE `status` = "pending"',
+        function (err, results) {
+            if (err) {
+                res.status(500).send(err);
+            } else {
+                res.send(results);
+            }
+        }
+    )
+})
+
 app.get('/list/pending', (req, res) => {
     pool.query(
         'SELECT * FROM `tasks` WHERE `status` = "pending"',
