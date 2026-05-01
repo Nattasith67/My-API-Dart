@@ -118,7 +118,7 @@ app.get('/list/category', (req, res) => {
 
 app.post('/list/category', (req, res) => {
     pool.query(
-        'INSERT INTO `tasks` (`name`) VALUES (?)',
+        'INSERT INTO `categories` (`name`) VALUES (?)',
         [req.body.type],
         function (err, results) {
             if (err) {
