@@ -9,45 +9,13 @@ app.use(express.json())
 
 const pool = mysql.createPool(process.env.DATABASE_URL);
 
-// Fetch all categories
-app.get('/list/categories', (req, res) => {
-    console.log('Category route hit');
+// Get all tasks
+app.get('/list', (req, res) => {
     pool.query(
-        'SELECT * FROM `category`',
+        'SELECT * FROM `tasks`',
         function (err, results) {
             if (err) {
                 res.status(500).send(err);
-            } else {
-                res.json(results);
-            }
-        }
-    )
-})
-
-// Update Category
-app.get('/list/categories/:id', (req, res) => {
-    pool.query(
-        'UPDATE `category` SET `name` = ? WHERE `id` = ?',
-        [req.body.name, req.params.id],
-        function (err, results) {
-            if (err) {
-                res.status(500).send(err);
-            } else {
-                res.json(results);
-            }
-        }
-    )
-})
-
-// Delete Category
-app.delete('/list/categories/:id', (req, res) => {
-    pool.query(
-        'DELETE FROM `category` WHERE id = ?',
-        [req.params.id],
-        function (err, results) {
-            if (err) {
-                console.error(err);
-                res.status(500).send('Error deleting item');
             } else {
                 res.send(results);
             }
@@ -55,7 +23,7 @@ app.delete('/list/categories/:id', (req, res) => {
     )
 })
 
-// นับจำนวนทั้งหมด
+// Get total count of tasks
 app.get('/list/count', (req, res) => {
     pool.query(
         'SELECT COUNT(*) as total FROM `tasks`',
@@ -121,26 +89,10 @@ app.get('/list/completed', (req, res) => {
     )
 })
 
-// ดึงรายการทั้งหมด
-app.get('/list', (req, res) => {
+app.get('/list/:id', (req, res) => {
+    const id = req.params.id;
     pool.query(
-        'SELECT * FROM `tasks`',
-        function (err, results) {
-            if (err) {
-                res.status(500).send(err);
-            } else {
-                res.send(results);
-            }
-        }
-    )
-})
-
-// --- 2. Route สำหรับเพิ่มข้อมูล (POST) ---
-
-app.post('/list/category', (req, res) => {
-    pool.query(
-        'INSERT INTO `category` (`name`) VALUES (?)',
-        [req.body.name],
+        'SELECT * FROM `tasks` WHERE id = ?', [id],
         function (err, results) {
             if (err) {
                 res.status(500).send(err);
@@ -161,23 +113,6 @@ app.post('/list', (req, res) => {
                 res.status(500).send('Error adding item');
             } else {
                 res.status(200).send(results);
-            }
-        }
-    )
-})
-
-// --- 3. Route ที่มีการใช้ Parameter (Dynamic Routes) ---
-// ** ต้องอยู่ด้านล่าง Static Routes เสมอ **
-
-app.get('/list/:id', (req, res) => {
-    const id = req.params.id;
-    pool.query(
-        'SELECT * FROM `tasks` WHERE id = ?', [id],
-        function (err, results) {
-            if (err) {
-                res.status(500).send(err);
-            } else {
-                res.send(results);
             }
         }
     )
