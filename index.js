@@ -50,7 +50,7 @@ app.get('/list/pending', (req, res) => {
 
 app.get('/list/completed', (req, res) => {
     pool.query(
-        'SELECT * FROM `tasks` WHERE `status` = "completed"',
+        'SELECT * FROM `tasks` WHERE `status` = "Completed"',
         function (err, results) {
             if (err) {
                 res.status(500).send(err);
