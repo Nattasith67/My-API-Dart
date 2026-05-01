@@ -106,7 +106,7 @@ app.get('/list/:id', (req, res) => {
 app.get('/list/getCategory', (req, res) => {
     console.log("GET:", req.body.name);
     pool.query(
-        'SELECT * FROM `categories`',
+        'SELECT * FROM categories',
         function (err, results) {
             if (err) {
                 res.status(500).send(err);
