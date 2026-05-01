@@ -103,7 +103,7 @@ app.get('/list/:id', (req, res) => {
     )
 })
 
-app.get('/list/category', (req, res) => {
+app.get('/list/getCategory', (req, res) => {
     console.log("GET:", req.body.name);
     pool.query(
         'SELECT * FROM `categories`',
