@@ -9,6 +9,7 @@ app.use(express.json())
 
 const pool = mysql.createPool(process.env.DATABASE_URL);
 
+// Get all tasks
 app.get('/list', (req, res) => {
     pool.query(
         'SELECT * FROM `tasks`',
@@ -22,6 +23,7 @@ app.get('/list', (req, res) => {
     )
 })
 
+// Get total count of tasks
 app.get('/list/count', (req, res) => {
     pool.query(
         'SELECT COUNT(*) as total FROM `tasks`',
@@ -91,6 +93,33 @@ app.get('/list/:id', (req, res) => {
     const id = req.params.id;
     pool.query(
         'SELECT * FROM `tasks` WHERE id = ?', [id],
+        function (err, results) {
+            if (err) {
+                res.status(500).send(err);
+            } else {
+                res.send(results);
+            }
+        }
+    )
+})
+
+app.get('/list/category', (req, res) => {
+    pool.query(
+        'SELECT name FROM `tasks`',
+        function (err, results) {
+            if (err) {
+                res.status(500).send(err);
+            } else {
+                res.send(results);
+            }
+        }
+    )
+})
+
+app.post('/list/category', (req, res) => {
+    pool.query(
+        'INSERT INTO `tasks` (`name`) VALUES (?)',
+        [req.body.type],
         function (err, results) {
             if (err) {
                 res.status(500).send(err);
