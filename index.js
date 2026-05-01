@@ -105,7 +105,7 @@ app.get('/list/:id', (req, res) => {
 
 app.post('/list', (req, res) => {
     pool.query(
-        'INSERT INTO `tasks` (`name`, `taskdate`, `status`, `createDate`, `type`) VALUES (?, ?, ?, NOW(), ?)',
+        'INSERT INTO `tasks` (`name`, `taskdate`, `status`, `createDate`, `category`) VALUES (?, ?, ?, NOW(), ?)',
         [req.body.name, req.body.date, req.body.status, req.body.type],
         function (err, results) {
             if (err) {
@@ -135,7 +135,7 @@ app.patch('/list/:id/status', (req, res) => {
 
 app.patch('/list/:id', (req, res) => {
     pool.query(
-        'UPDATE `tasks` SET `name`= ?, `taskdate`= ?, `status`= ?, `type`= ?, `updateDate` = NOW() WHERE id = ?',
+        'UPDATE `tasks` SET `name`= ?, `taskdate`= ?, `status`= ?, `category`= ?, `updateDate` = NOW() WHERE id = ?',
         [req.body.name, req.body.taskdate, req.body.status, req.body.type, req.params.id],
         function (err, results) {
             if (err) {
